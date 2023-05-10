@@ -16,4 +16,4 @@ class Producto(models.Model):
         ordering=['nombre']
 
     def __str__(self) -> str:
-        return self.idProducto+' '+self.nombre    
+        return self.idProducto+' '+self.nombre
