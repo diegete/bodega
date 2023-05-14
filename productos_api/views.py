@@ -12,4 +12,6 @@ from .serializers import *
 class ProductoViews(viewsets.ModelViewSet):
     serializer_class = ProductoSerializer
     queryset = Producto.objects.all()
-
+    
+def home_view(request):
+    return render(request, 'home.html')    

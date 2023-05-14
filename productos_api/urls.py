@@ -9,7 +9,8 @@ router = routers.DefaultRouter()
 router.register(r'productos', views.ProductoViews,'productos')
 
 urlpatterns = [
+    path('', home_view, name='home'),
     path('', include(router.urls)),
-    path('docs/', include_docs_urls(title='Api productos'))
+    path('docs/', include_docs_urls(title='Api productos')),
 
 ]
