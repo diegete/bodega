@@ -133,9 +133,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# autorización
+# autorización colocar la url que se va a conectar
 CORS_ALLOWED_ORIGINS = [
-    ''
+    
 ]
 
 # para añadir la auto documentación de tus apis
