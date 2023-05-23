@@ -6,11 +6,13 @@ from rest_framework import routers
 from productos_api import views
 
 router = routers.DefaultRouter()
-router.register(r'productos', views.productos_api,'productos')
+router.register(r'productos', views.ProductoViews,'productos')
+
 #instalar requests 
 urlpatterns = [
     path('', home_view, name='home'),
-    path('productos/',productos_api,name='productos' ),
+    path('api/',include(router.urls)),
+    path('api/json',productos_api,name='productos' ),
     path('docs/', include_docs_urls(title='Api productos')),
     path('api/respuesta', hola_mundo, name='respuesta'),
     path('api/user',user,name='usuarios')

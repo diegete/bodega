@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import corsheaders
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,7 +32,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.175.206']
 
 
 # Application definition
@@ -135,9 +136,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # autorización colocar la url que se va a conectar
 CORS_ALLOWED_ORIGINS = [
-    
+    # 'https://favicon.ico',
+    # 'https://192.168.175.206',
 ]
-
+# 
+CORS_ORIGIN_ALLOW_ALL = True
 # para añadir la auto documentación de tus apis
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',

@@ -9,10 +9,14 @@ from .models import *
 from .serializers import * 
 
 # Create your views here.
+class ProductoViews(viewsets.ModelViewSet):
+    serializer_class = ProductoSerializer
+    queryset = Producto.objects.all()
 
 def productos_api(request):
     productos = Producto.objects.all().values('idProducto','nombre','precio')
     return JsonResponse({'productos':list(productos)})
+
     
 def home_view(request):
     return render(request, 'home.html')
