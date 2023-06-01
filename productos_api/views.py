@@ -41,7 +41,7 @@ def user(resquest):
 @csrf_exempt
 def agregar_a_lista(request):
     lista_productos = []
-            
+        
     if request.method == 'POST':
         
         ids_productos = request.POST.getlist('ids_productos[]')
@@ -59,6 +59,7 @@ def agregar_a_lista(request):
             
             lista_productos.append(producto_dict)
     data = json.dumps(lista_productos)
-    
+    for key, value in request.POST.items():
+        print(f"{key}:{value}")
     return JsonResponse(data, safe=False)
 
