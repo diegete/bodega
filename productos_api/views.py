@@ -73,3 +73,6 @@ def agregar_a_lista(request):
             return HttpResponseBadRequest("Invalid JSON data")
     
     return HttpResponseNotAllowed(['POST'])
+# el formato del json es : {
+#   "ids_productos": ["1", "2", "3"]
+# }
