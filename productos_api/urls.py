@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/json',productos_api,name='productos' ),
     path('docs/', include_docs_urls(title='Api productos')),
     path('api/respuesta', hola_mundo, name='respuesta'),
-    path('api/user',user,name='usuarios')
+    path('api/user',user,name='usuarios'),
+    path('lista_productos/', views.agregar_a_lista, name='lista_productos'),
 
 ]
