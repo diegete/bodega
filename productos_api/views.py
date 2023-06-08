@@ -41,29 +41,32 @@ def user(resquest):
 @csrf_exempt
 def agregar_a_lista(request):
     lista_productos = []
-        
+    lis_prod = []
+    
     if request.method == 'POST':
         print("Entro en POST")
-        
+
         try:
             data = json.loads(request.body)
-            ids_productos = data.get('ids_productos', [])
-            print("IDs de productos:", ids_productos)
-            
-            for id_producto in ids_productos:
-                producto = get_object_or_404(Producto, pk=id_producto)
+            productos = data  # Obtener la lista de productos del JSON recibido
+
+            for producto in productos:
+                id_producto = producto['id']
+                cantidad = producto['cantidad']
+
+                producto_obj = get_object_or_404(Producto, pk=id_producto)
                 producto_dict = {
-                    'idProducto': producto.idProducto,
-                    'nombre': producto.nombre,
-                    'stock': str(producto.stock),
-                    'categoria': producto.categoria,
-                    'imagen': str(producto.imagen),
-                    'precio': str(producto.precio),
-                    'estado': producto.estado
+                    'idProducto': producto_obj.idProducto,
+                    'nombre': producto_obj.nombre,
+                    'stock': str(producto_obj.stock),
+                    'categoria': producto_obj.categoria,
+                    'imagen': str(producto_obj.imagen),
+                    'precio': str(producto_obj.precio),
+                    'estado': producto_obj.estado,
+                    'cantidad': cantidad
                 }
-                
                 lista_productos.append(producto_dict)
-            
+                # lista_productos = Carrito
             data = json.dumps(lista_productos)
             print("Lista de productos:", lista_productos)
             print("Datos en formato JSON:", data)
@@ -71,8 +74,11 @@ def agregar_a_lista(request):
             return JsonResponse(data, safe=False)
         except json.JSONDecodeError:
             return HttpResponseBadRequest("Invalid JSON data")
-    
+
     return HttpResponseNotAllowed(['POST'])
-# el formato del json es : {
-#   "ids_productos": ["1", "2", "3"]
-# }
+# formato del json nuevo esto recibe[
+ #   {"id": 1, "cantidad": 10},
+  #  {"id": 2, "cantidad": 10},
+   # {"id": 3, "cantidad": 10},
+   # {"id": 4, "cantidad": 10}
+#]

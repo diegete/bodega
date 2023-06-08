@@ -19,4 +19,5 @@ class Producto(models.Model):
         return self.idProducto+' '+self.nombre
 
 
-    
+class Carrito(models.Model):
+    Producto=[]
