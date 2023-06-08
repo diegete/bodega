@@ -48,7 +48,7 @@ def agregar_a_lista(request):
 
         try:
             data = json.loads(request.body)
-            productos = data  # Obtener la lista de productos del JSON recibido
+            productos = data['productos']  # Obtener la lista de productos del JSON recibido
 
             for producto in productos:
                 id_producto = producto['id']
