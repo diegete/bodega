@@ -69,6 +69,9 @@ def agregar_a_lista(request):
                 if producto_obj.stock >= cantidad:
                     producto_obj.stock -= cantidad
                     producto_obj.save()
+                else:
+                    # No hay suficiente stock
+                    return HttpResponseBadRequest("No existe stock para el producto con la ID: " + str(id_producto))    
 
             # Guardar en el modelo Carrito
             carrito = Carrito.crear_carrito(lista_productos)
