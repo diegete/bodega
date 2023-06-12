@@ -9,6 +9,7 @@ import requests as req
 from .models import *   
 from .serializers import * 
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
 
 # Create your views here.
 class ProductoViews(viewsets.ModelViewSet):
@@ -41,14 +42,11 @@ def user(resquest):
 @csrf_exempt
 def agregar_a_lista(request):
     lista_productos = []
-    lis_prod = []
     
     if request.method == 'POST':
-        print("Entro en POST")
-
         try:
             data = json.loads(request.body)
-            productos = data['productos']  # Obtener la lista de productos del JSON recibido
+            productos = data['productos']
 
             for producto in productos:
                 id_producto = producto['id']
@@ -66,19 +64,27 @@ def agregar_a_lista(request):
                     'cantidad': cantidad
                 }
                 lista_productos.append(producto_dict)
-                # lista_productos = Carrito
+
+                # Descuento del stock
+                if producto_obj.stock >= cantidad:
+                    producto_obj.stock -= cantidad
+                    producto_obj.save()
+
+            # Guardar en el modelo Carrito
+            carrito = Carrito.crear_carrito(lista_productos)
+
             data = json.dumps(lista_productos)
-            print("Lista de productos:", lista_productos)
-            print("Datos en formato JSON:", data)
-            
+
             return JsonResponse(data, safe=False)
         except json.JSONDecodeError:
             return HttpResponseBadRequest("Invalid JSON data")
 
     return HttpResponseNotAllowed(['POST'])
-# formato del json nuevo esto recibe[
- #   {"id": 1, "cantidad": 10},
-  #  {"id": 2, "cantidad": 10},
-   # {"id": 3, "cantidad": 10},
-   # {"id": 4, "cantidad": 10}
-#]
+# formato del json nuevo esto recibe{
+#   "productos": [
+#     {"id": 1, "cantidad": 10},
+#     {"id": 2, "cantidad": 10},
+#     {"id": 3, "cantidad": 10},
+#     {"id": 4, "cantidad": 10}
+#   ]
+# }

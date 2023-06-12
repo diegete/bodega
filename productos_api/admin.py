@@ -7,3 +7,8 @@ class ProductosAdmin(admin.ModelAdmin):
     
 
 admin.site.register(Producto,ProductosAdmin)
+
+class CarritoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'productos']
+
+admin.site.register(Carrito, CarritoAdmin)
