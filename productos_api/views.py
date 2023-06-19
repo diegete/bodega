@@ -39,7 +39,7 @@ def user(resquest):
     print(respuesta)
     return HttpResponse(respuesta)
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([AllowAny])
 def Carrito_api(request):
     Carritos = Carrito.objects.all().values_list()
