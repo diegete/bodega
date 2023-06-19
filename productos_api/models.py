@@ -11,7 +11,8 @@ class Producto(models.Model):
     imagen = models.URLField(verbose_name='foto',null=True,blank='true')
     precio = models.CharField(max_length=6,verbose_name='precio',default=False)
     estado = models.BooleanField(verbose_name='estado',default=False)
-
+    fecha = models.DateTimeField(default=now)
+    
     class Meta:
         verbose_name='Producto'
         verbose_name_plural='Productos'
@@ -24,30 +25,12 @@ class Producto(models.Model):
 class Carrito(models.Model):
     fecha = models.DateTimeField(default=now)
     productos = models.JSONField(default=list)
-    def save(self, *args, **kwargs):
-        clt_timezone = pytz_timezone("Chile/Continental")
-        self.fecha = self.fecha.astimezone(clt_timezone)
-        super().save(*args, **kwargs)  
-
-    class Meta:
-        verbose_name='Carrito'
-        verbose_name_plural='Ordenes'
-        ordering=['id']
 
     @classmethod
-    def crear_carrito(cls, registros, *args, **kwargs):
+    def crear_carrito(cls, registros):
         carrito = cls()
         carrito.productos = registros
-
-        # Obtener la fecha y hora actual en GMT
-        fecha_gmt = timezone.now()
-
-        # Convertir la fecha y hora a GMT-5 (restar 5 horas)
-        fecha_gmt_menos_4 = fecha_gmt - timezone.timedelta(hours=4)
-
-        # Asignar la fecha y hora convertida al carrito
-        carrito.fecha = fecha_gmt_menos_4
-
+        
         carrito.save()
         return carrito
 
