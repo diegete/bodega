@@ -1,15 +1,14 @@
 import json
 from django.shortcuts import get_object_or_404, render, HttpResponse
-from rest_framework.parsers import JSONParser
-from rest_framework.response import Response
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
-from rest_framework import status,viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 import requests as req
 from .models import *   
 from .serializers import * 
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import F
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 class ProductoViews(viewsets.ModelViewSet):
@@ -39,6 +38,13 @@ def user(resquest):
     respuesta =r.json()
     print(respuesta)
     return HttpResponse(respuesta)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def Carrito_api(request):
+    Carritos = Carrito.objects.all().values_list()
+    return JsonResponse({'carritos':list(Carritos)})
+
 @csrf_exempt
 def agregar_a_lista(request):
     lista_productos = []

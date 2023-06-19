@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
-from django.utils import timezone
-from pytz import timezone as pytz_timezone
+
 # Create your models here.
 class Producto(models.Model):
     idProducto = models.CharField(primary_key=True,max_length=20,verbose_name='idProducto')
