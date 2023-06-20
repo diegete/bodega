@@ -10,6 +10,6 @@ class ProductosAdmin(admin.ModelAdmin):
 admin.site.register(Producto,ProductosAdmin)
 
 class CarritoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'productos','fecha']
+    list_display = ['id', 'productos','fecha','nombre','direccion']
 
 admin.site.register(Carrito, CarritoAdmin)
