@@ -8,8 +8,8 @@ class Producto(models.Model):
     stock = models.IntegerField(verbose_name='stock')
     categoria= models.CharField(max_length=20,verbose_name='Categoria')
     imagen = models.URLField(verbose_name='foto',null=True,blank='true')
-    precio = models.CharField(max_length=6,verbose_name='precio',default=False)
-    estado = models.BooleanField(verbose_name='estado',default=False)
+    precio = models.CharField(max_length=6,verbose_name='precio')
+    estado = models.BooleanField(verbose_name='estado')
     fecha = models.DateTimeField(default=now)
     
     class Meta:
@@ -23,13 +23,13 @@ class Producto(models.Model):
 
 class Carrito(models.Model):
     fecha = models.DateTimeField(default=now)
+    nombre = models.CharField(max_length=30, verbose_name='Nombre', null=False)
+    direccion = models.CharField(max_length=30, verbose_name='Dirección', null=False)
     productos = models.JSONField(default=list)
 
     @classmethod
-    def crear_carrito(cls, registros):
-        carrito = cls()
-        carrito.productos = registros
-        
+    def crear_carrito(cls, lista_productos, nombre, direccion):
+        carrito = cls(productos=lista_productos, nombre=nombre, direccion=direccion)
         carrito.save()
         return carrito
 

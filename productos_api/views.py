@@ -53,6 +53,12 @@ def agregar_a_lista(request):
         try:
             data = json.loads(request.body)
             productos = data['productos']
+            nombre = data['nombre']
+            direccion = data['direccion']
+
+            # Verificar si nombre y dirección están vacíos
+            if not nombre or not direccion:
+                return HttpResponseBadRequest("Nombre y dirección son campos requeridos.")
 
             for producto in productos:
                 id_producto = producto['id']
@@ -80,7 +86,7 @@ def agregar_a_lista(request):
                     return HttpResponseBadRequest("No existe stock para el producto con la ID: " + str(id_producto))    
 
             # Guardar en el modelo Carrito
-            carrito = Carrito.crear_carrito(lista_productos)
+            carrito = Carrito.crear_carrito(lista_productos, nombre=nombre, direccion=direccion)
 
             data = json.dumps(lista_productos)
 
