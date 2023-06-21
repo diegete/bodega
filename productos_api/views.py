@@ -17,7 +17,7 @@ class ProductoViews(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
 
 def productos_api(request):
-    productos = Producto.objects.all().values('idProducto','nombre','precio')
+    productos = Producto.objects.all().values('id','nombre','precio')
     return JsonResponse({'productos':list(productos)})
 
     
