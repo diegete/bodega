@@ -1,15 +1,13 @@
 from django.contrib import admin
-from.models import *
+from .models import Producto, Carrito
 
-# Register your models here.
-
-class ProductosAdmin(admin.ModelAdmin):
-    list_display=('idProducto','nombre','categoria','estado','imagen','stock','precio', 'fecha')
-    
-
-admin.site.register(Producto,ProductosAdmin)
+class ProductoInline(admin.TabularInline):
+    model = Carrito.productos.through
 
 class CarritoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'productos','fecha','nombre','direccion']
+    inlines = [ProductoInline]
+    exclude = ('productos',)
+    list_display = ('nombre', 'direccion', 'fecha')
 
+admin.site.register(Producto)
 admin.site.register(Carrito, CarritoAdmin)

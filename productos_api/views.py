@@ -1,4 +1,5 @@
 import json
+from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404, render, HttpResponse
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from rest_framework import viewsets
@@ -48,7 +49,7 @@ def Carrito_api(request):
 @csrf_exempt
 def agregar_a_lista(request):
     lista_productos = []
-    
+
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -66,7 +67,7 @@ def agregar_a_lista(request):
 
                 producto_obj = get_object_or_404(Producto, pk=id_producto)
                 producto_dict = {
-                    'idProducto': producto_obj.idProducto,
+                    'id': producto_obj.id,  # Utilizar el atributo 'id' en lugar de 'idProducto'
                     'nombre': producto_obj.nombre,
                     'stock': str(producto_obj.stock),
                     'categoria': producto_obj.categoria,
@@ -83,10 +84,13 @@ def agregar_a_lista(request):
                     producto_obj.save()
                 else:
                     # No hay suficiente stock
-                    return HttpResponseBadRequest("No existe stock para el producto con la ID: " + str(id_producto))    
+                    return HttpResponseBadRequest("No existe stock para el producto con la ID: " + str(id_producto))
 
             # Guardar en el modelo Carrito
-            carrito = Carrito.crear_carrito(lista_productos, nombre=nombre, direccion=direccion)
+            carrito = Carrito.objects.create(nombre=nombre, direccion=direccion)
+
+            for producto_dict in lista_productos:
+                carrito.productos.add(Producto.objects.get(id=producto_dict['id']))
 
             data = json.dumps(lista_productos)
 
