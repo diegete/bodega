@@ -43,7 +43,7 @@ def user(resquest):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def Carrito_api(request):
-    Carritos = Carrito.objects.all().values_list()
+    Carritos = Carrito.objects.all().values('id','fecha','nombre','direccion','productos')
     return JsonResponse({'carritos':list(Carritos)})
 
 @csrf_exempt
