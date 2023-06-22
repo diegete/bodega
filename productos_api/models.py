@@ -40,3 +40,10 @@ class Carrito(models.Model):
         carrito.save()
         carrito.productos.set(lista_productos)
         return carrito
+class CarritoProducto(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"Carrito: {self.carrito.nombre} - Producto: {self.producto.nombre} - Cantidad: {self.cantidad}"

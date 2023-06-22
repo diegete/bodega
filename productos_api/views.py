@@ -67,7 +67,7 @@ def agregar_a_lista(request):
 
                 producto_obj = get_object_or_404(Producto, pk=id_producto)
                 producto_dict = {
-                    'id': producto_obj.id,  # Utilizar el atributo 'id' en lugar de 'idProducto'
+                    'id': producto_obj.id,
                     'nombre': producto_obj.nombre,
                     'stock': str(producto_obj.stock),
                     'categoria': producto_obj.categoria,
@@ -84,13 +84,19 @@ def agregar_a_lista(request):
                     producto_obj.save()
                 else:
                     # No hay suficiente stock
-                    return HttpResponseBadRequest("No existe stock para el producto con la ID: " + str(id_producto))
+                    return HttpResponseBadRequest("No existe stock suficiente para el producto con ID: " + str(id_producto))
 
             # Guardar en el modelo Carrito
             carrito = Carrito.objects.create(nombre=nombre, direccion=direccion)
 
             for producto_dict in lista_productos:
-                carrito.productos.add(Producto.objects.get(id=producto_dict['id']))
+                producto_id = producto_dict['id']
+                cantidad = producto_dict['cantidad']
+                carrito_producto = CarritoProducto.objects.create(
+                    carrito=carrito,
+                    producto=Producto.objects.get(id=producto_id),
+                    cantidad=cantidad
+                )
 
             data = json.dumps(lista_productos)
 

@@ -1,14 +1,20 @@
 from django.contrib import admin
 
-from .models import Producto, Carrito
+from .models import CarritoProducto, Producto, Carrito
 
-class ProductoInline(admin.TabularInline):
-    model = Carrito.productos.through
+class CarritoProductoInline(admin.TabularInline):
+    model = CarritoProducto
+    extra = 1
 
 class CarritoAdmin(admin.ModelAdmin):
-    inlines = [ProductoInline]
+    inlines = [CarritoProductoInline]
     exclude = ('productos',)
     list_display = ('nombre', 'direccion', 'fecha')
+
+    def cantidad_producto(self, obj):
+        return obj.carritoproducto_set.first().cantidad
+
+    cantidad_producto.short_description = 'Cantidad'
 
 admin.site.register(Producto)
 admin.site.register(Carrito, CarritoAdmin)
