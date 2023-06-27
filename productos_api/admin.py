@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from .models import CarritoProducto, Producto, Carrito
+from .models import Producto, Carrito, CarritoProducto
 
 class CarritoProductoInline(admin.TabularInline):
     model = CarritoProducto
     extra = 1
 
 class CarritoAdmin(admin.ModelAdmin):
-    inlines = [CarritoProductoInline]
+    inlines = [CarritoProductoInline,]
     exclude = ('productos',)
     list_display = ('nombre', 'direccion', 'fecha')
 
