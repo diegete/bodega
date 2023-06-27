@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from django.db.models import F
 
 class Producto(models.Model):
     id = models.CharField(primary_key=True, max_length=20, verbose_name='ID Producto')
@@ -44,6 +45,20 @@ class CarritoProducto(models.Model):
     carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
-
+    
+    
     def __str__(self):
         return f"Carrito: {self.carrito.nombre} - Producto: {self.producto.nombre} - Cantidad: {self.cantidad}"
+    
+    def save(self, *args, **kwargs):
+        # Obtener el objeto Producto asociado
+        producto = self.producto
+
+        # Restar la cantidad del stock del producto
+        producto.stock = F('stock') - self.cantidad
+
+        # Guardar el producto actualizado
+        producto.save()
+
+        # Llamar al método save() del modelo padre para guardar el objeto CarritoProducto
+        super().save(*args, **kwargs)
