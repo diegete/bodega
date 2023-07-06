@@ -9,7 +9,8 @@ class CarritoProductoInline(admin.TabularInline):
 class CarritoAdmin(admin.ModelAdmin):
     inlines = [CarritoProductoInline,]
     exclude = ('productos',)
-    list_display = ('nombre', 'direccion', 'fecha')
+    list_display = ('id','nombre', 'direccion', 'fecha')
+
 
     def cantidad_producto(self, obj):
         return obj.carritoproducto_set.first().cantidad

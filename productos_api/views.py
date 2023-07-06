@@ -1,8 +1,9 @@
 import json
 from django.forms import model_to_dict
-from django.shortcuts import get_object_or_404, render, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from rest_framework import viewsets
+from django.shortcuts import render
 from rest_framework.decorators import api_view
 import requests as req
 from .models import *   
@@ -16,7 +17,7 @@ class ProductoViews(viewsets.ModelViewSet):
     serializer_class = ProductoSerializer
     queryset = Producto.objects.all()
 
-def productos_api(request):
+def productos_api(req):
     productos = Producto.objects.all().values('id','nombre','precio')
     return JsonResponse({'productos':list(productos)})
 
@@ -24,7 +25,7 @@ def productos_api(request):
 def home_view(request):
     return render(request, 'home.html')
 
-def hola_mundo(resquest):
+def hola_mundo(req):
     
     url = 'http://192.168.137.1:5000/api/v1/test/saludo'
     r = req.get(url)
@@ -32,7 +33,15 @@ def hola_mundo(resquest):
     print(respuesta['saldo'])
     return HttpResponse(respuesta)
 
-def user(resquest):
+
+def consulta(request):
+    url = 'http://191.112.16.202:8000/api/producto/'
+    r = req.get(url)
+    respuesta = r.json()
+    print(respuesta)
+    return HttpResponse(respuesta)
+
+def user(req):
     
     url = 'http://192.168.137.1:5000/api/v1/test/user'
     r = req.get(url)
@@ -42,7 +51,7 @@ def user(resquest):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def Carrito_api(request):
+def Carrito_api(req):
     Carritos = Carrito.objects.all().values('id','fecha','nombre','direccion','productos')
     return JsonResponse({'carritos':list(Carritos)})
 
@@ -121,3 +130,44 @@ def agregar_a_lista(request):
 #   "nombre": "juan",
 #   "direccion": "su casa"
 # }
+@csrf_exempt
+def enviar_productos(request):
+    if request.method == 'POST':
+        # Obtener los valores del formulario
+        nombre = request.POST.get('nombre')
+        codigo = request.POST.get('codigo')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        stock = request.POST.get('stock')
+        foto = request.POST.get('foto')
+
+        # Crear el diccionario con los valores del producto
+        producto = {
+            "Nombre": nombre,
+            "Codigo": codigo,
+            "Descripcion": descripcion,
+            "Precio": precio,
+            "Stock": stock,
+            "Foto": foto
+        }
+
+        # Enviar el producto a la URL deseada
+        url_destino = 'http://191.112.16.202:8000/api/producto/insert'
+        response = req.post(url_destino, json=producto)
+
+        if response.status_code == 200:
+            # El producto se envió correctamente
+            context = {
+                'mensaje': 'Producto enviado correctamente',
+                'producto': producto
+            }
+            return render(request, 'enviar_productos.html', context)
+        else:
+            # Hubo un error al enviar el producto
+            context = {
+                'error': 'Error al enviar el producto'
+            }
+            return render(request, 'enviar_productos.html', context)
+    else:
+        # Si es una solicitud GET, simplemente renderiza el formulario vacío
+        return render(request, 'enviar_productos.html')

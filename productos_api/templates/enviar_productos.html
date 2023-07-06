@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesinfo.css' %}">
+    <title>Enviar Productos</title>
+</head>
+<body>
+    <h1>Enviar Productos</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" required><br>
+        <label for="codigo">Código:</label>
+        <input type="text" name="codigo" required><br>
+        <label for="descripcion">Descripción:</label>
+        <textarea name="descripcion" required></textarea><br>
+        <label for="precio">Precio:</label>
+        <input type="number" name="precio" required><br>
+        <label for="stock">Stock:</label>
+        <input type="number" name="stock" required><br>
+        <label for="foto">Foto:</label>
+        <input type="text" name="foto" required><br>
+        <input type="submit" value="Enviar">
+    </form>
+
+    {% if mensaje %}
+        <h2>{{ mensaje }}</h2>
+        <p>Nombre: {{ producto.Nombre }}</p>
+        <p>Código: {{ producto.Codigo }}</p>
+        <p>Descripción: {{ producto.Descripcion }}</p>
+        <p>Precio: {{ producto.Precio }}</p>
+        <p>Stock: {{ producto.Stock }}</p>
+        <p>Foto: <img src="{{ producto.Foto }}" alt="Foto del producto"></p>
+    {% elif error %}
+        <h2>{{ error }}</h2>
+    {% endif %}
+</body>
+</html>
