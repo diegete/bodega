@@ -200,6 +200,7 @@ JAZZMIN_SETTINGS = {
 
         # Url that gets reversed (Permissions can be added)
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+    
 
         # external url that opens in a new window (Permissions can be added)
         #{"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
@@ -209,6 +210,9 @@ JAZZMIN_SETTINGS = {
 
         # App with dropdown menu to all its models pages (Permissions checked against models)
         #{"app": "books"},
+        {"name": "Envio productos", "url": "http://127.0.0.1:8000/enviar-productos/", "permissions": ["auth.view_user"]},
+
+         
     ],
 
     #############
